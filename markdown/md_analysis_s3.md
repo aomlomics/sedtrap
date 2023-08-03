@@ -85,7 +85,6 @@ snakemake dada2_se_diversity_filtered --cores all
 ```
 ```
 snakemake dada2_pe_report_unfiltered
-
 ```
 
 
