@@ -370,7 +370,7 @@ ggsave(filename = "16S_abund.pdf", plot = last_plot(),  path = NULL, scale = 1, 
 
 
 
-########Rachael's Code
+########Additional analysis to those that Sean Anderson performed
 
 
 
