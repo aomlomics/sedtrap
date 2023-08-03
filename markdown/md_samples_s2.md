@@ -1,5 +1,5 @@
 # md_samples_s2
-| sampleID	| cup |	duration | date_open	| date_closed	| date_range |
+| sampleID | cup | duration | date_open	| date_closed	| date_range |
 | --- | --- | --- | --- | --- | --- | 
 | sampleID | cup | duration | date_open | date_closed | date_range | 
 | GMT1_16S_1A | 1 | 7 | 7-Dec-21 | 14-Dec-21 | 12/7-12/14 | 
