@@ -22,9 +22,7 @@ mv tourmaline tourmaline-GMT-1_16S
 ```
 wget https://data.qiime2.org/distro/core/qiime2-2023.2-py38-osx-conda.yml
 conda env create -n qiime2-2023.2 --file qqiime2-2023.2-py38-osx-conda.yml
-
 ```
-
 ```
 conda activate qiime2-2023.2
 conda install -c conda-forge -c bioconda snakemake biopython muscle clustalo tabulate
@@ -42,7 +40,6 @@ cd /contrib/Rachael.Storo/16S-GMT1/tourmaline-GMT-1_16S01-imported
 wget https://data.qiime2.org/2021.2/common/silva-138-99-seqs-515-806.qza
 wget https://data.qiime2.org/2021.2/common/silva-138-99-tax-515-806.qza
 ```
-
 ```
 mv silva-138-99-tax-515-806.qza reftax.qza
 mv silva-138-99-seqs-515-806.qza refseqs.qza
@@ -56,7 +53,6 @@ cd /contrib/Rachael.Storo/16S-GMT1/tourmaline-GMT-1_16S
 ``` 
 qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path ./ --input-format CasavaOneEightSingleLanePerSampleDirFmt --output-path demux-paired-end-18S-GMT-1.qza
 
-
 qiime cutadapt trim-paired --i-demultiplexed-sequences demux-paired-end-18S-GMT-1.qza --p-adapter-f AGTAGGTGAACCTGCAGAAGGATC --p-adapter-r GACGGGCGGTGTGTAC --p-match-read-wildcards --p-match-adapter-wildcards --verbose --o-trimmed-sequences trimmed_remove_primers_wild-18S-GMT-1.qza
 
 qiime cutadapt trim-paired --i-demultiplexed-sequences trimmed_remove_primers_wild-18S-GMT-1.qza --p-front-f GTACACACCGCCCGTC --p-front-r TGATCCTTCTGCAGGTTCACCTAC --p-match-read-wildcards --p-match-adapter-wildcards --p-discard-untrimmed --verbose --o-trimmed-sequences demux-trimmed-18S-GMT-1.qza
@@ -68,10 +64,7 @@ qiime tools export --input-path demux-trimmed-18S-GMT-1.qza --output-path trimme
 ``` 
 qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path ./ --input-format CasavaOneEightSingleLanePerSampleDirFmt --output-path demux-paired-end-16S-GMT-1.qza
 
-
 qiime cutadapt trim-paired --i-demultiplexed-sequences demux-paired-end-16S-GMT-1.qza --p-anywhere-f GTGYCAGCMGCCGCGGTAA --p-anywhere-r CCGYCAATTYMTTTRAGTTT --p-match-read-wildcards TRUE --p-match-adapter-wildcards TRUE --verbose --o-trimmed-sequences trimmed_remove_primers_wild-16S-GMT-1.qza
-
-
 
 qiime tools export --input-path trimmed_remove_primers_wild-16S-GMT-1.qza --output-path trimmed-reads
 ```
@@ -79,11 +72,9 @@ qiime tools export --input-path trimmed_remove_primers_wild-16S-GMT-1.qza --outp
 ## Run Tourmaline
 
 ```
-
 cd /contrib/Rachael.Storo/16S-GMT1/tourmaline-GMT-1_16S
 snakemake dada2_se_denoise --cores all
 ```
-
 ```
 snakemake dada2_se_taxonomy_unfiltered --cores all
 snakemake dada2_se_taxonomy_filtered --cores all
