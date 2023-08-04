@@ -1,6 +1,7 @@
 # sedtrap
 Files associated with the USGS GoM Sediment Trap (GMT cruises). A study examining sedimentation rates and biogeochemical influences on microbial communities.
-
+Project title: Characterizing the Biodiversity and Variability of the Biological Carbon Pump in the Northern Gulf of Mexico
+Supported by NOAA's Northern Gulf Institute
 
 The structure of this repository is:
 
