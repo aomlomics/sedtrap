@@ -1,4 +1,3 @@
-
 # Load packages
 library(tidyverse)
 library(vegan)
@@ -64,7 +63,6 @@ p<-plot_ordination(ps_rare, ordu, color="date_range")+theme_bw() + theme(text = 
   geom_point(aes(fill=date_range),size = 5, shape = 21, colour = "black") + scale_fill_manual(values=mycolors)
 p$data$date_range <- factor(p$data$date_range, levels = c("12/7-12/14","12/14-12/21","12/21-01/4","01/4-01/18","01/18-02/01","02/01-02/15","02/15-03/01","03/01-03/15", "03/15-03/29","03/29-04/12","04/12-04/26","04/26-05/10","05/10-05/24")) # Set the order of the sampling range 
 p
-
 ggsave(filename = "18S_PCoA.pdf", plot = last_plot(), device = "pdf", path = NULL, scale = 1, width = 8, height = 5, dpi = 150) # Save figure as pdf
 
 # Repeat PCoA without May and March dates
@@ -74,7 +72,6 @@ p<-plot_ordination(ps_sub2, ordu, color="date_range")+theme_bw() +  theme(text =
   geom_point(aes(fill=date_range),size = 5, shape = 21, colour = "black") + scale_fill_manual(values=mycolors)
 p$data$date_range <- factor(p$data$date_range, levels = c("12/7-12/14","12/14-12/21","12/21-01/4","01/4-01/18","01/18-02/01","02/01-02/15","02/15-03/01","03/01-03/15", "03/15-03/29","03/29-04/12","04/12-04/26","04/26-05/10","05/10-05/24"))
 p
-
 ggsave(filename = "18S_PCoA_zoomed.pdf", plot = last_plot(), device = "pdf", path = NULL, scale = 1, width = 8, height = 5, dpi = 150)
 
 # Estimate ASV richness and Shannon diversity index for each sampling interval
@@ -132,7 +129,6 @@ treemap(dtf = x1,
           c("center", "center")),
         inflate.labels=F,
         force.print.labels = F) 
-
 dev.off()
 
 # 18S taxa abundance over time for top 6 groups - class level
@@ -159,20 +155,17 @@ p + geom_point(aes(fill = Class)) + theme(text = element_text(size=16))+
   geom_smooth(se=TRUE, linetype="solid", size=1, level=0.95, fill = "gray45", color = "black", alpha = 0.4, method = "loess")+ 
   facet_wrap(~ Class, ncol =2, scales = "free_y") + theme_bw() + ylab("Relative Abundance (%)") + 
   theme(legend.position = "none")+ guides(fill=guide_legend(ncol=2))+ theme(axis.text.x=element_text(angle=45, hjust=1))
-
 ggsave(filename = "18S_abund.pdf", plot = last_plot(),  device = "pdf", path = NULL, scale = 1, width = 7, height = 8, dpi = 150) # Save and export ggplot figure as .eps file 
 
 #### Repeat same analysis with 16S samples (filtered)
 # Load ASV count table
 #table_16S <- read_qza(file="table_16S.qza")
 table_16S <- read_qza(file.choose())
-
 count_tab_16S <- table_16S$data %>% as.data.frame() # Convert to data frame 
 
 # Load taxonomy
 #taxonomy_16S <- read_qza(file="taxonomy_16S.qza")
 taxonomy_16S <- read_qza(file.choose())
-
 tax_tab_16S <- taxonomy_16S$data %>% 
   as.data.frame() %>%
   separate(Taxon, sep = ";", c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")) %>% 
@@ -216,14 +209,10 @@ p<-plot_ordination(ps_rare, ordu, color="date_range")+theme_bw() + theme(text = 
   geom_point(aes(fill=date_range),size = 5, shape = 21, colour = "black") + scale_fill_manual(values=mycolors)
 p$data$date_range <- factor(p$data$date_range, levels = c("12/7-12/14","12/14-12/21","12/21-01/4","01/4-01/18","01/18-02/01","02/01-02/15","02/15-03/01","03/01-03/15", "03/15-03/29","03/29-04/12","04/12-04/26","04/26-05/10","05/10-05/24"))
 p
-
 ggsave(filename = "16S_PCoA_by_dates.pdf", plot = last_plot(), device = "pdf", path = NULL, scale = 1, width = 8, height = 5, dpi = 150)
-
-
 pcup<-plot_ordination(ps_rare, ordu, color="cup")+theme_bw() + theme(text = element_text(size=16))+
   geom_point(aes(fill=cup),size = 5, shape = 21, colour = "black") + scale_fill_manual(values=mycolors)
 pcup
-
 ggsave(filename = "16S_PCoA_by_cups.pdf", plot = last_plot(), device = "pdf", path = NULL, scale = 1, width = 8, height = 5, dpi = 150)
 
 # Estimate ASV richness and Shannon diversity index for each sampling interval
@@ -232,12 +221,10 @@ cup = sample_data(ps_sub)$cup
 date = sample_data(ps_sub)$date_range
 rich_all <- data.frame(rich_16S,date,cup)
 df2 = melt(rich_all) # Melt data
-
 p <- ggplot(rich_all, aes(x=factor(cup), y=value, fill=cup))
 p
 p$data$date<- factor(p$data$date, levels = c("12/7-12/14","12/14-12/21","12/21-01/4","01/4-01/18","01/18-02/01","02/01-02/15","02/15-03/01","03/01-03/15", "03/15-03/29","03/29-04/12","04/12-04/26","04/26-05/10","05/10-05/24"))
 p$data$cup<- factor(p$data$cup, levels = c(1,2,3,4,5,6,7,8,9,10,11,12,13))
-
 mycolors <- c("#17385A","#427475", "#0E9594","#1F5041","#C2CFB2","#F9DFBE","#ECCBD3","#827191","#92416C","#52113C","#962C2C","#F2673D","#FF9B71")
 
 #Box and whisker for shannon diversity
@@ -245,7 +232,6 @@ mycolors <- c("#17385A","#427475", "#0E9594","#1F5041","#C2CFB2","#F9DFBE","#ECC
 cup <- c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')
 mass_flux<- c(".261",".868",".497",".32",".165",".078",".105",".016",".058","1.03",".149","0.093","0.016")
 geochem<-data.frame(cup,mass_flux)
-
 p <- ggplot(rich_all,aes(x=factor(cup, level=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')), y=Shannon, width=0.5)) +
   geom_boxplot(width=0.9,aes(x=factor(cup, level=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')), y=Shannon,fill=cup)) +
   theme(text = element_text(size=30)) + ylab("16S Shannon Diversity Values") + xlab("Cup") + theme(legend.position="right")+ scale_fill_manual(values=mycolors,breaks=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')) +
@@ -295,7 +281,6 @@ tree<-treemap(dtf = x1,
                 c("center", "center")),
               inflate.labels=F,
               force.print.labels = F) 
-
 dev.off()
 
 # Taxa abundance over time for top 6 groups
@@ -319,14 +304,13 @@ p + geom_point(aes(fill = Class)) + theme(text = element_text(size=16))+
   geom_smooth(se=TRUE, linetype="solid", size=1, level=0.95, fill = "gray45", color = "black", alpha = 0.4, method = "loess")+ 
   facet_wrap(~ Class, ncol =2, scales = "free_y") + theme_bw() + ylab("Relative Abundance (%)") + 
   theme(legend.position = "none")+ guides(fill=guide_legend(ncol=2))+ theme(axis.text.x=element_text(angle=45, hjust=1))
-
 ggsave(filename = "16S_abund.pdf", plot = last_plot(),  path = NULL, scale = 1, width = 7, height = 8, dpi = 150) 
 
 ########Additional analysis to those that Sean Anderson performed
 # First aglomerate the ASVs at the order level using the phyloseq function, tax_glom
 phylumGlommed = tax_glom(ps_rare, "Phylum")
+                                     
 # and plot
-
 gpt <- subset_taxa(phylumGlommed, Kingdom=="Bacteria")
 gpt <- prune_taxa(names(sort(taxa_sums(gpt),TRUE)[1:300]), gpt)
 plot_heatmap(gpt, sample.label="cup")
