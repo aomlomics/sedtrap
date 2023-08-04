@@ -17,7 +17,6 @@ library(palmerpenguins)
 library(ggbreak) 
 library(patchwork)
 
-
 ## Load 18S count and taxonomy files
 # Load 18S ASV count table
 table <- read_qza(file="table_18S.qza")
@@ -163,16 +162,6 @@ p + geom_point(aes(fill = Class)) + theme(text = element_text(size=16))+
 
 ggsave(filename = "18S_abund.pdf", plot = last_plot(),  device = "pdf", path = NULL, scale = 1, width = 7, height = 8, dpi = 150) # Save and export ggplot figure as .eps file 
 
-
-
-
-
-
-
-
-
-
-
 #### Repeat same analysis with 16S samples (filtered)
 # Load ASV count table
 #table_16S <- read_qza(file="table_16S.qza")
@@ -222,9 +211,6 @@ ps_filt = filter_taxa(ps_sub, function (x) {sum(x) > 1}, prune=TRUE)
 ps_rare <- rarefy_even_depth(ps_filt, sample.size = min(sample_sums(ps_filt)), rngseed = 714, replace = TRUE, trimOTUs = TRUE, verbose = TRUE)
 
 # PCoA ordination for 16S samples
-
-
-
 ordu = ordinate(ps_rare, "PCoA", "bray")
 p<-plot_ordination(ps_rare, ordu, color="date_range")+theme_bw() + theme(text = element_text(size=16))+
   geom_point(aes(fill=date_range),size = 5, shape = 21, colour = "black") + scale_fill_manual(values=mycolors)
@@ -252,10 +238,7 @@ p
 p$data$date<- factor(p$data$date, levels = c("12/7-12/14","12/14-12/21","12/21-01/4","01/4-01/18","01/18-02/01","02/01-02/15","02/15-03/01","03/01-03/15", "03/15-03/29","03/29-04/12","04/12-04/26","04/26-05/10","05/10-05/24"))
 p$data$cup<- factor(p$data$cup, levels = c(1,2,3,4,5,6,7,8,9,10,11,12,13))
 
-
-
 mycolors <- c("#17385A","#427475", "#0E9594","#1F5041","#C2CFB2","#F9DFBE","#ECCBD3","#827191","#92416C","#52113C","#962C2C","#F2673D","#FF9B71")
-
 
 #Box and whisker for shannon diversity
 
@@ -263,21 +246,13 @@ cup <- c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')
 mass_flux<- c(".261",".868",".497",".32",".165",".078",".105",".016",".058","1.03",".149","0.093","0.016")
 geochem<-data.frame(cup,mass_flux)
 
-
-  
 p <- ggplot(rich_all,aes(x=factor(cup, level=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')), y=Shannon, width=0.5)) +
   geom_boxplot(width=0.9,aes(x=factor(cup, level=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')), y=Shannon,fill=cup)) +
   theme(text = element_text(size=30)) + ylab("16S Shannon Diversity Values") + xlab("Cup") + theme(legend.position="right")+ scale_fill_manual(values=mycolors,breaks=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')) +
   geom_point(aes(fill=cup), size =5, shape = 21, colour = "black", position=position_jitterdodge(0.4)) +
   stat_boxplot(geom = "errorbar", width=0, size=1.2) +
   theme(axis.text.x=element_text(angle=0, color="black",size=20)) 
- 
-  
-
-
-
 p
-
 
 #Boxplot for OTU abundance
 p1 <- ggplot(rich_all,aes(x=factor(cup, level=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')), y=Observed, width=0.5)) +
@@ -286,20 +261,8 @@ p1 <- ggplot(rich_all,aes(x=factor(cup, level=c('1', '2', '3', '4','5','6','7','
   geom_point(aes(fill=cup), size =5, shape = 21, colour = "black", position=position_jitterdodge(0.4)) +
   stat_boxplot(geom = "errorbar", width=0, size=1.2) +
   theme(axis.text.x=element_text(angle=0, size=20, color="black")) 
-
-
 p1
-
-
 ggsave(filename = "Diversity_16S.pdf", plot = last_plot(), device = "pdf", path = NULL, scale = 1, width = 10, height =5, dpi = 150) 
-
-
-
-
-
-
-
-
 
 # 16S taxa tree plots
 ps <- tax_glom(ps_rare, "Genus", NArm=FALSE)
@@ -359,21 +322,7 @@ p + geom_point(aes(fill = Class)) + theme(text = element_text(size=16))+
 
 ggsave(filename = "16S_abund.pdf", plot = last_plot(),  path = NULL, scale = 1, width = 7, height = 8, dpi = 150) 
 
-
-
-
-
-
-
-
-
-
-
-
 ########Additional analysis to those that Sean Anderson performed
-
-
-
 # First aglomerate the ASVs at the order level using the phyloseq function, tax_glom
 phylumGlommed = tax_glom(ps_rare, "Phylum")
 # and plot
@@ -381,16 +330,12 @@ phylumGlommed = tax_glom(ps_rare, "Phylum")
 gpt <- subset_taxa(phylumGlommed, Kingdom=="Bacteria")
 gpt <- prune_taxa(names(sort(taxa_sums(gpt),TRUE)[1:300]), gpt)
 plot_heatmap(gpt, sample.label="cup")
-
-
-
 p1 <- ggplot(rich_all,aes(x=factor(cup, level=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')), y=Observed, width=0.5)) +
   geom_boxplot(width=0.9,aes(x=factor(cup, level=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')), y=Observed,fill=cup)) +
   theme(text = element_text(size=30)) + ylab("# of Observed ASVs") + xlab("Cup") + theme(legend.position="right")+ scale_fill_manual(values=mycolors,breaks=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')) +
   geom_point(aes(fill=cup), size =5, shape = 21, colour = "black", position=position_jitterdodge(0.4)) +
   stat_boxplot(geom = "errorbar", width=0, size=1.2) +
   theme(axis.text.x=element_text(angle=0, size=20, color="black")) 
-
 plot_bar(phylumGlommed, fill = "Phylum")+
   facet_grid(rows="cup", scales="free_y",space="free")+coord_flip()+
   ylab("Relative abundance") + theme(axis.title = element_text(size=20, face="bold")) +
@@ -401,16 +346,7 @@ plot_bar(phylumGlommed, fill = "Phylum")+
   #theme(legend.key.size = unit(1, "cm"))+
   #theme(legend.key = element_rect(size=10)) + 
   #theme(legend.direction = "vertical",legend.box = "vertical")
-
-
-
-
-
-
-
-
 bubcolors<- c("#277da1","#604798","#f67894","#13aa8b","#707787", "#f1801a","#70be6d","#f00149")
-
 xx<-ggplot(x1, aes(x = cup , y = x1$Abundance)) + 
   geom_point(aes(size = x1$Abundance , fill = Phylum ), alpha =0.8, shape = 21) +
   guides(fill = guide_legend(override.aes = list(size = 10))) +
@@ -424,27 +360,18 @@ xx<-ggplot(x1, aes(x = cup , y = x1$Abundance)) +
         legend.position = "right") +
   scale_fill_manual(values = mycolors) +
   scale_size_continuous(range = c(0,25),name = "Abundance") 
-
 xx
-
 
 #Average the triplicate cup values for each OTU for a simplified bubble plot
 #subset data
 newdata <- x1[c(1,3,4
                 )]
-
 #for each unique cup value in newdata, make a new DF with the mean for each OTU
-
-
 test1<-(aggregate(Abundance ~ OTU + cup,  data=newdata,FUN=mean,na.rm=TRUE))
 colnames(test1)[3] ="Average_Abundance"
-
-
 Avgab<-test1
-
-
+                                     
 #Add taxonomic information based on OTU 
-
 testing<-merge(x1,Avgab)
 total <- merge(x1,Avgab,by=c("OTU","cup"))
 subset<-total[total$Average_Abundance != 0, ]
@@ -452,18 +379,12 @@ avgabund<-subset[,-4]
 avgabund<-subset[,-3]
 
 #keep only unique rows
-
 avgabund %>% distinct()
 Avgab<-avgabund
 
-
 #Replot a simplified bubble plot
-
-
 mycolors <- c("#17385A","#427475", "#0E9594","#1F5041","#C2CFB2","#F9DFBE","#ECCBD3","#827191","#92416C","#52113C","#962C2C","#F2673D","#FF9B71")
-
-mycolors1 <- c("#C2CFB2","#1F5041","#427475","#17385A","#52113C","#92416C","#827191","#F9DFBE")
-               
+mycolors1 <- c("#C2CFB2","#1F5041","#427475","#17385A","#52113C","#92416C","#827191","#F9DFBE")            
 bubb1<-ggplot(Avgab, aes(x=factor(cup, level=c('1', '2', '3', '4','5','6','7','8','9','10','11','12','13')) , y = Average_Abundance)) + 
   geom_point(aes(size = Average_Abundance , fill = Phylum ), alpha =0.8, shape = 21) +
   ylim(0.05,.46) +
@@ -479,17 +400,7 @@ bubb1<-ggplot(Avgab, aes(x=factor(cup, level=c('1', '2', '3', '4','5','6','7','8
         legend.position = "right") +
   scale_fill_manual(values = mycolors1) +
   scale_size_continuous(range = c(0,25),name = "Average Abundance") 
-
-
 bubb1
-
-
-
-
-
-
-
-
 resultList <- list()
 for(x in 1:nrow(x1)){
   key = x1[x, ]$OTU
@@ -505,10 +416,7 @@ for(x in 1:nrow(x1)){
     resultList[[key]][[cup]] = c(resultList[[key]][[cup]], value)
   }
 }
-
-
 finalResultList <- data.frame()
-
 for(x in 1:length(resultList)){
   for(y in 1:length(resultList[[x]])){
     counter = 0
@@ -520,5 +428,3 @@ for(x in 1:length(resultList)){
     finalResultList[nrow(finalResultList) + 1,] <- c(resultList[[x]], y, (total / counter))
   }
 }
-
-
