@@ -6,8 +6,8 @@ Supported by NOAA's Northern Gulf Institute
 
 The structure of this repository is:
 
-* markdown- study questions, sample descriptions, analysis notes, and results
+* markdown- study questions, sample descriptions (including a metadata table for R analysis), analysis notes, and results
 * figures – pre-publication versions of figures
-* metadata – sample metadata and other metadata
+* metadata – sample metadata and other metadata, prepared for database submission
 * notebooks – Jupyter notebooks for data analysis and figure generation
-* tourmaline – link to Tourmaline output for 16S and 18S-ITS rRNA datasets
+* tourmaline – link to Tourmaline output for 16S and 18S-ITS rRNA datasets, and metadata/manifest files required for running Tourmaline
