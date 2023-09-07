@@ -1,57 +1,66 @@
 ### Goal: Run Tourmaline on GMT-1 16s and 18s data to generate figures and tables for further analysis in R. 
 
 Platform: 
-This code was run on the NOAA parallel works AWS cloud instance with the following parameters- 
-* Controller node: m6id.2xlarge (8 vCPUs, 32 GB Memory, amd64) 
-* Image disk settings: 1 image disk, 250 GB
-* Compute node: c3.8xlarge (32 vCPUs, 60 GB Memory, amd64) max nodes, 2
+This code was run on an intel mac with the following parameters- 
+* 2.6 GHz 6-core intel core i7
+* AMD Radeon Pro 5300M, 4GB, Intel UHD Graphics 630 1536 MB
+* 16 GB 2667 MHz DDR4
+* Ventura 13.2.1
 
 ### Notes:
-* Reference database used: silva-138-99-seqs-515-806
+* 16S Reference database used: silva-183_1-99-515f_926r-sediment-saline-classifier.qza
+* 18S Reference database used: (18s) PR2 v. 5.0.0
 
 ## Clone directory
 ```
-cd /contrib/Rachael.Storo/16S-GMT1/tourmaline-GMT-1_16S
 git clone https://github.com/aomlomics/tourmaline.git
-
-mv tourmaline tourmaline-GMT-1_16S
+mv tourmaline tourmaline-GMT-1_16S 
 ```
-
 ## Dependencies
+```
+conda create -c conda-forge -c bioconda -n snakemake snakemake-minimal
 
-```
-wget https://data.qiime2.org/distro/core/qiime2-2023.2-py38-osx-conda.yml
-conda env create -n qiime2-2023.2 --file qqiime2-2023.2-py38-osx-conda.yml
-```
-```
-conda activate qiime2-2023.2
-conda install -c conda-forge -c bioconda snakemake biopython muscle clustalo tabulate
+wget https://data.qiime2.org/distro/core/qiime2-2023.5-py38-osx-conda.yml
+conda env create -n qiime2-2023.5 --file qiime2-2023.5-py38-osx-conda.yml
+
+conda activate qiime2-2023.5
+conda install -c conda-forge -c bioconda biopython muscle clustalo tabulate
 conda install -c conda-forge deicode
 pip install empress
 qiime dev refresh-cache
 conda install -c bioconda bioconductor-msa bioconductor-odseq
 ```
+## Reference Databases
+### 18S
+```
+qiime tools import \
+	--type 'FeatureData[Taxonomy]' \
+	--input-path /Users/rachaelkarns/Downloads/pr2_version_5.0.0_SSU_mothur.tax \
+	--output-path ref-taxonomy.qza \
+	--input-format HeaderlessTSVTaxonomyFormat
 
-## Initiate Tourmaline
-```
-cd /contrib/Rachael.Storo/16S-GMT1/tourmaline-GMT-1_16S01-imported
-```
-```
-wget https://data.qiime2.org/2021.2/common/silva-138-99-seqs-515-806.qza
-wget https://data.qiime2.org/2021.2/common/silva-138-99-tax-515-806.qza
-```
-```
-mv silva-138-99-tax-515-806.qza reftax.qza
-mv silva-138-99-seqs-515-806.qza refseqs.qza
-```
-```
-cd /contrib/Rachael.Storo/16S-GMT1/tourmaline-GMT-1_16S
+qiime tools import \
+	--type 'FeatureData[Sequence]' \
+	--input-path /Users/rachaelkarns/Downloads/pr2_version_5.0.0_SSU_mothur.fasta \
+	--output-path ref-sequence.qza
+
+qiime feature-classifier \
+	fit-classifier-naive-bayes \
+	--i-reference-reads ref-sequence.qza \
+	--i-reference-taxonomy ref-taxonomy.qza \
+	--o-classifier pr2-classifier.qza
+
+qiime tools export \
+	--input-path pr2-classifier.qza \
+	--output-path refseqs.qza
+
+mv refseqs.qza ../01-imported
 ```
 ## Trim Primers
-
 ### Trim primers- 18S
 ``` 
 qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path ./ --input-format CasavaOneEightSingleLanePerSampleDirFmt --output-path demux-paired-end-18S-GMT-1.qza
+
 
 qiime cutadapt trim-paired --i-demultiplexed-sequences demux-paired-end-18S-GMT-1.qza --p-adapter-f AGTAGGTGAACCTGCAGAAGGATC --p-adapter-r GACGGGCGGTGTGTAC --p-match-read-wildcards --p-match-adapter-wildcards --verbose --o-trimmed-sequences trimmed_remove_primers_wild-18S-GMT-1.qza
 
@@ -59,7 +68,6 @@ qiime cutadapt trim-paired --i-demultiplexed-sequences trimmed_remove_primers_wi
 
 qiime tools export --input-path demux-trimmed-18S-GMT-1.qza --output-path trimmed-reads
 ```
-
 ### Trim primers- 16S
 ``` 
 qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path ./ --input-format CasavaOneEightSingleLanePerSampleDirFmt --output-path demux-paired-end-16S-GMT-1.qza
@@ -68,25 +76,25 @@ qiime cutadapt trim-paired --i-demultiplexed-sequences demux-paired-end-16S-GMT-
 
 qiime tools export --input-path trimmed_remove_primers_wild-16S-GMT-1.qza --output-path trimmed-reads
 ```
-
 ## Run Tourmaline
 
 ```
-cd /contrib/Rachael.Storo/16S-GMT1/tourmaline-GMT-1_16S
-snakemake dada2_se_denoise --cores all
-```
-```
-snakemake dada2_se_taxonomy_unfiltered --cores all
-snakemake dada2_se_taxonomy_filtered --cores all
-```
-```
-snakemake dada2_se_diversity_unfiltered --cores all
-snakemake dada2_se_diversity_filtered --cores all
-```
-```
-snakemake dada2_pe_report_unfiltered
-```
+cd ../tourmaline-GMT-1_16S
+snakemake --use-conda dada2_se_denoise --cores all
+snakemake --use-conda dada2_se_taxonomy_unfiltered --cores all
+snakemake --use-conda dada2_se_taxonomy_filtered --cores all
+snakemake --use-conda dada2_se_diversity_unfiltered --cores all
+snakemake --use-conda dada2_se_diversity_filtered --cores all
+snakemake --use-conda dada2_pe_report_unfiltered
 
+cd ../tourmaline-GMT-1_18S
+snakemake --use-conda dada2_se_denoise --cores all
+snakemake --use-conda dada2_se_taxonomy_unfiltered --cores all
+snakemake --use-conda dada2_se_taxonomy_filtered --cores all
+snakemake --use-conda dada2_se_diversity_unfiltered --cores all
+snakemake --use-conda dada2_se_diversity_filtered --cores all
+snakemake --use-conda dada2_pe_report_unfiltered
+```
 
 
 
