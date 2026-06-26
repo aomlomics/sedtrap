@@ -1,0 +1,92 @@
+sedtrap-edna-analysis/
+├── README.md
+├── LICENSE (Apache 2.0 or CC-BY-4.0)
+├── environment.yml                      # conda dependencies for reproducibility
+├── .gitignore
+├── .github/
+│   └── workflows/
+│       └── tests.yml                    # optional: CI/CD for code validation
+├── data/
+│   ├── raw/
+│   │   ├── README.md                    # data access instructions
+│   │   ├── sra_accessions.txt           # NCBI SRA BioProject links
+│   │   └── ncbi_biosamples.csv          # BioSample metadata
+│   ├── processed/
+│   │   ├── asv_table.qza                # QIIME 2 feature table (fasta)
+│   │   ├── taxonomy.qza                 # QIIME 2 taxonomy assignments
+│   │   ├── asv_table.csv                # ASV × sample matrix
+│   │   ├── taxonomy_table.csv           # ASV taxonomy table (SILVA/PR2)
+│   │   └── metadata/
+│   │       ├── sample_metadata.csv      # FAIRe-compliant sample metadata
+│   │       ├── environmental_data.csv   # physicochemical (CTD, nutrients, etc.)
+│   │       └── biogeochem_flux.csv      # mass flux, POC, PIC, opal, PON
+│   └── derived/
+│       ├── diversity_metrics.csv        # alpha/beta diversity indices
+│       ├── core_microbiome.csv          # prevalent ASVs across timepoints
+│       └── taxonomic_summaries/         # aggregated by phylum, class, order
+├── scripts/
+│   ├── 01_qc_and_processing/
+│   │   ├── run_tourmaline.sh            # wrapper for Tourmaline workflow
+│   │   ├── trim_params_optimization.R   # identify optimal DADA2 parameters
+│   │   └── taxonomy_assignment.py       # consensus-BLAST vs SILVA/PR2/MetaZooGene
+│   ├── 02_exploratory_analysis/
+│   │   ├── alpha_diversity.R            # richness, Shannon, Simpson
+│   │   ├── beta_diversity_ordination.R  # NMDS, PCA, Bray-Curtis
+│   │   ├── temporal_trends.R            # ASV abundance over time
+│   │   └── core_microbiome_analysis.R   # prevalence/abundance filtering
+│   ├── 03_statistical_models/
+│   │   ├── seasonal_patterns.R          # GAM, seasonal decomposition
+│   │   ├── eDNA_vs_biogeochem.R         # correlation with flux, POC, PIC
+│   │   ├── eRNA_analysis.R              # 16S DNA/RNA ratios
+│   │   └── foraminifera_case_study.R    # eDNA vs morphological assemblages
+│   ├── 04_multivariate_integration/
+│   │   ├── bgc_argo_comparison.R        # sediment trap vs b_bp backscatter
+│   │   ├── mesopelagic_export_dynamics.R # sinking POM community composition
+│   │   └── carbon_export_model.R        # integrate eDNA with biogeochem
+│   └── 05_figures_and_tables/
+│       ├── manuscript_fig1.R            # time series + diversity
+│       ├── manuscript_fig2.R            # community composition heatmaps
+│       ├── manuscript_fig3.R            # ordination + environmental drivers
+│       ├── supplementary_figures.R      # sensitivity, taxonomic detail
+│       └── table_generators.R           # summary tables for methods/results
+├── results/
+│   ├── figures/
+│   │   ├── manuscript/
+│   │   │   ├── fig1_timeseries.pdf
+│   │   │   ├── fig2_composition.pdf
+│   │   │   ├── fig3_ordination.pdf
+│   │   │   └── ...
+│   │   └── supplementary/
+│   │       ├── figS1_rarefaction.pdf
+│   │       ├── figS2_taxonomy_detail.pdf
+│   │       └── ...
+│   ├── tables/
+│   │   ├── table1_sample_summary.csv
+│   │   ├── table2_abundant_asv.csv
+│   │   ├── tableS1_rare_asv.csv
+│   │   └── ...
+│   └── statistics/
+│       ├── diversity_summary.txt
+│       ├── model_outputs.txt
+│       ├── permanova_results.txt
+│       └── correlation_matrix.csv
+├── notebooks/
+│   ├── 01_data_exploration.Rmd          # exploratory analysis (R Markdown)
+│   ├── 02_manuscript_drafting.Rmd       # narrative results section
+│   └── archive/
+│       └── exploratory_notebooks/       # failed approaches, sensitivity tests
+├── manuscripts/
+│   ├── manuscript1_bcp_edna.md          # Markdown outline/draft
+│   ├── manuscript2_sargassum_bloom.md
+│   └── responses_to_reviewers/
+├── docs/
+│   ├── METHODS.md                       # detailed methods (Sterivex, KingFisher, DADA2)
+│   ├── TAXONOMY_PIPELINE.md             # consensus-BLAST SOP + rationale
+│   ├── DATA_ARCHIVING.md                # NCEI/OBIS/NCBI submission SOP
+│   ├── REPRODUCIBILITY.md               # how to re-run all analyses
+│   └── TROUBLESHOOTING.md               # common issues + fixes
+├── config/
+│   ├── tourmaline_config.yaml           # Tourmaline parameters
+│   ├── dada2_params.json                # DADA2 trimming length, etc.
+│   └── analysis_config.R                # paths, thresholds, sample filtering
+└── .gitattributes                       # handle binary QIIME 2 files
